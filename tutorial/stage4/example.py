@@ -4,7 +4,7 @@ import os
 import esky
 
 if getattr(sys,"frozen",False):
-    app = esky.Esky(sys.executable,"https://example-app.com/downloads/")
+    app = esky.Esky(sys.executable,"http://localhost:8000")
     print "You are running: %s" % app.active_version
     try:
         if(app.find_update() != None):
