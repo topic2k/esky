@@ -10,14 +10,14 @@ install:
         # remove for container api when cx-freeze gets approved
         - "sudo apt-get install cx-freeze"
         - "pip install future"
-          #        - "pip install bbfreeze"
+#        - "pip install bbfreeze"
 
 before_script:
         # socket already in use error when run by our test_esky.py script
         - python -m SimpleHTTPServer 8000 &
 
 script:
-        - python -m pytest 
+        - sudo python -m pytest --verbose --pastebin=all
 
 after_script:
         - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
@@ -27,20 +27,3 @@ notifications:
         - email: false
 
 
-
-
-
-
-
-
-
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
