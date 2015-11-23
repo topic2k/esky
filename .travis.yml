@@ -25,8 +25,8 @@ install:
 script:
         - sudo py.test 
 
-#after_script:
-#        - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
+after_script:
+        - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
 
 
 notifications:
