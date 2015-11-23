@@ -9,6 +9,7 @@ python:
 install:
         # remove for container api
         - "sudo apt-get install cx-freeze"
+	- "pip install pytest"
         - "pip install future"
 
 before_script:
@@ -16,7 +17,7 @@ before_script:
         - python -m SimpleHTTPServer 8000 &
 
 script:
-        - sudo `python pytest --verbose --pastebin=all`
+        - sudo python pytest --verbose --pastebin=all
 
 after_script:
         - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
