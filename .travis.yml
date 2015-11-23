@@ -7,13 +7,13 @@ python:
         - "pypy"
 
 before_install:
+	# Required for importing tkinter...
         - "export DISPLAY=:99.0"
         - "sh -e /etc/init.d/xvfb start" 
 
 
 install:
         # remove for container api
-        - "sudo apt-get install cx-freeze"
         - "pip install cx-freeze"
         - "pip install pytest pytest-cov"
         - "pip install future"
@@ -23,7 +23,7 @@ before_script:
         - python -m SimpleHTTPServer 8000 &
 
 script:
-        - py.test 
+        - sudo py.test 
 
 after_script:
         - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
@@ -31,26 +31,4 @@ after_script:
 
 notifications:
         - email: false
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
 #
