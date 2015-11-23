@@ -273,10 +273,9 @@ class TestEsky(unittest.TestCase):
         try:
             server = HTTPServer(("localhost",LOCAL_HTTP_PORT),SimpleHTTPRequestHandler)
         except Exception:
+            # in travis ci this wasn't working so...
             cmd = 'python -m SimpleHTTPServer {0} & '.format(LOCAL_HTTP_PORT)
-            
-           # in travis ci we start our own server
-           pass
+            subprocess.Popen(cmd, shell=1)
         else:
             server_thread = threading.Thread(target=server.serve_forever)
             server_thread.daemon = True
