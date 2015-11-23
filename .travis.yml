@@ -12,7 +12,7 @@ install:
         - "pip install future"
 
 script:
-        - py.test --verbose -m not "skip_travis"
+        - py.test --verbose -m "not skip_travis"
 
 notifications:
         - email: false
