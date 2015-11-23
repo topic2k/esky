@@ -9,7 +9,7 @@ python:
 install:
         # remove for container api
         - "sudo apt-get install cx-freeze"
-        - "pip install pytest"
+        - "pip install pytest pytest-cov"
         - "pip install future"
 
 before_script:
