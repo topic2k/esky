@@ -23,7 +23,7 @@ install:
 #        - python -m SimpleHTTPServer 8000 &
 
 script:
-        - sudo py.test 
+        - py.test 
 
 after_script:
         - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
