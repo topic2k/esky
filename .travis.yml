@@ -18,15 +18,15 @@ install:
         - "pip install pytest pytest-cov"
         - "pip install future"
 
-before_script:
+#before_script:
         # socket already in use error when run by our test_esky.py script
-        - python -m SimpleHTTPServer 8000 &
+#        - python -m SimpleHTTPServer 8000 &
 
 script:
         - sudo py.test 
 
-after_script:
-        - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
+#after_script:
+#        - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
 
 
 notifications:
