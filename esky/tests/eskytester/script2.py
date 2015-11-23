@@ -11,6 +11,7 @@ import esky
 import esky.util
 from esky.util import LOCAL_HTTP_PORT
 import esky.tests
+from pprint import pprint
 
 
 ESKY_CONTROL_DIR = esky.util.ESKY_CONTROL_DIR
@@ -35,11 +36,12 @@ assert sys.frozen
 app = esky.tests.TestableEsky(sys.executable,"http://localhost:{0}/dist/".format(LOCAL_HTTP_PORT))
 assert app.name == "eskytester"
 assert app.active_version == app.version == "0.2"
+print('HERE WE GO NOW')
 assert app.find_update() == "0.3"
+# pprint(app._Esky__version_finder.version_graph.__dict__)
 assert os.path.isfile(eskytester.script_path(app,"script1"))
 assert os.path.isfile(eskytester.script_path(app,"script2"))
-
-#  Test that MSVCRT was bundled correctly
+ # Test that MSVCRT was bundled correctly
 if sys.platform == "win32" and sys.hexversion >= 0x02600000:
     versiondir = os.path.dirname(sys.executable)
     for nm in os.listdir(versiondir):
@@ -49,7 +51,7 @@ if sys.platform == "win32" and sys.hexversion >= 0x02600000:
             assert len(os.listdir(msvcrt_dir)) >= 2
             break
     else:
-        assert False, "MSVCRT not bundled in version dir"
+        assert False, "MSVCRT not bundled in version dir "+versiondir
     for nm in os.listdir(app.appdir):
         if nm.startswith("Microsoft.") and nm.endswith(".CRT"):
             msvcrt_dir = os.path.join(app.appdir,nm)
@@ -75,13 +77,16 @@ if len(sys.argv) == 1:
     assert not os.path.isdir(v1dir)
     assert not os.path.isdir(v3dir)
     #  Check that the bootstrap env is intact
+    print('checkt htat the bootrasp env is intact')
     with open(os.path.join(app._get_versions_dir(),"eskytester-0.2."+platform,ESKY_CONTROL_DIR,"bootstrap-manifest.txt"),"rt") as mf:
         for nm in mf:
             nm = nm.strip()
             assert os.path.exists(os.path.join(app.appdir,nm))
     script2 = eskytester.script_path(app,"script2")
     #  Simulate a broken upgrade.
+    print('simulating broken update')
     upv3 = app.version_finder.fetch_version(app,"0.3")
+    print('fetched version?')
     os.rename(upv3,v3dir)
     #  While we're here, check that the bootstrap library hasn't changed
     if os.path.exists(os.path.join(app.appdir,"library.zip")):
@@ -90,6 +95,7 @@ if len(sys.argv) == 1:
         assert f1.read() == f2.read()
         f1.close()
         f2.close()
+    print('checking bootstrap exe')
     #  Also check one of the bootstrap exes to make sure it has changed safely
     if sys.platform == "win32":
         f1 = open(os.path.join(app.appdir,"script2"+dotexe),"rb")

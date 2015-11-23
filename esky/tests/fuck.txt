@@ -1,0 +1,7 @@
+============================= test session starts =============================
+platform win32 -- Python 2.7.10 -- py-1.4.30 -- pytest-2.7.2
+rootdir: C:\Users\timeyyy\Dropbox\programming\testesky\mine, inifile: 
+collected 32 items
+
+test_esky.py 
+>>>>>>>>>>>>>>>>>>> PDB set_trace (IO-capturing turned off) >>>>>>>>>>>>>>>>>>>

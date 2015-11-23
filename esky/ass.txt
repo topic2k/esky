@@ -1,0 +1,8 @@
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.6 -- py-1.4.28 -- pytest-2.7.1
+rootdir: /home/alfa/Dropbox/programming/testesky/mine, inifile: 
+collected 31 items
+
+tests/test_esky.py ...............................
+
+========================== 31 passed in 92.86 seconds ==========================

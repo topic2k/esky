@@ -8,7 +8,6 @@
 
 from __future__ import with_statement
 
-
 import os
 import sys
 import imp
@@ -21,12 +20,10 @@ import inspect
 import zipfile
 import ctypes
 
-
 try:
-  from py2exe.build_exe import py2exe
+    from py2exe.build_exe import py2exe
 except ImportError:
-  from py2exe.distutils_build_exe import py2exe
-  
+    from py2exe.distutils_build_exe import py2exe
 
 import esky
 from esky.util import is_core_dependency, ESKY_CONTROL_DIR
@@ -39,20 +36,20 @@ except ImportError:
 
 #  Hack to make win32com work seamlessly with py2exe
 if modulefinder is not None:
-  try:
-    import win32com
-    for p in win32com.__path__[1:]:
-        modulefinder.AddPackagePath("win32com", p)
-    for extra in ["win32com.shell"]: #,"win32com.mapi"
-        __import__(extra)
-        m = sys.modules[extra]
-        for p in m.__path__[1:]:
-           modulefinder.AddPackagePath(extra, p)
-  except ImportError:
-     pass
+    try:
+        import win32com
+        for p in win32com.__path__[1:]:
+            modulefinder.AddPackagePath("win32com", p)
+        for extra in ["win32com.shell"]: #,"win32com.mapi"
+            __import__(extra)
+            m = sys.modules[extra]
+            for p in m.__path__[1:]:
+                modulefinder.AddPackagePath(extra, p)
+    except ImportError:
+        pass
 
 
-class custom_py2exe(py2exe): 
+class custom_py2exe(py2exe):
     """Custom py2exe command subclass.
 
     This py2exe command subclass incorporates some well-known py2exe "hacks"
@@ -132,9 +129,9 @@ def freeze(dist):
     cmd.excludes = excludes
     if "bundle_files" in options:
         if options["bundle_files"] < 3 and dist.compile_bootstrap_exes:
-             err = "can't compile bootstrap exes when bundle_files < 3"
-             raise RuntimeError(err)
-    for (nm,val) in options.iteritems():
+            err = "can't compile bootstrap exes when bundle_files < 3"
+            raise RuntimeError(err)
+    for (nm,val) in options.items():
         setattr(cmd,nm,val)
     cmd.dist_dir = dist.freeze_dir
     cmd.finalize_options()
@@ -226,11 +223,11 @@ def freeze(dist):
             #  want when zipfile=None is specified; otherwise each bootstrap
             #  exe would also contain the whole bundled zipfile.
             coderes = struct.pack("iiii",
-                         magic, # magic value used for integrity checking,
-                         optmz, # optimization level to enable
-                         unbfrd,  # whether to use unbuffered output
-                         len(code),
-                      ) + b"\x00" + code + b"\x00\x00"
+                                  magic, # magic value used for integrity checking,
+                                  optmz, # optimization level to enable
+                                  unbfrd,  # whether to use unbuffered output
+                                  len(code),
+                                  ) + b"\x00" + code + b"\x00\x00"
             winres.add_resource(exepath,coderes,u"PYTHONSCRIPT",1,0)
         #  If the python dll hasn't been copied into the bootstrap env,
         #  make sure it's stored in each bootstrap dll as a resource.
@@ -376,7 +373,6 @@ def _chainload(target_dir):
       # Execute all code in the context of __main__ module.
       d_locals = d_globals = sys.modules["__main__"].__dict__
       d_locals["__name__"] = "__main__"
-
       for code in codelist:
           if sys.version[0] < 3:
               exec code in d_globals, d_locals
@@ -490,5 +486,3 @@ def _chainload(target_dir):
       sys.exit(0)
 
 """
-
-
