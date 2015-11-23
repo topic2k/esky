@@ -7,7 +7,7 @@ python:
         - "pypy"
 
 before_install:
-	# Required for importing tkinter...
+        # Required for importing tkinter...
         - "export DISPLAY=:99.0"
         - "sh -e /etc/init.d/xvfb start" 
 
