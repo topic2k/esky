@@ -201,7 +201,7 @@ class TestEsky(unittest.TestCase):
                                                    "bootstrap_code":bscode}})
 
     if esky.sudo.can_get_root():
-        @pytest.mark.skip_travis
+        @pytest.mark.fail_travis
         @pytest.mark.cxfreeze
         def test_esky_cxfreeze_needsroot(self):
             with setenv("ESKY_NEEDSROOT","1"):
