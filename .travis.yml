@@ -8,7 +8,7 @@ python:
 
 install:
         # remove for container api
-	- "sudo apt-get install cx-freeze"
+        - "sudo apt-get install cx-freeze"
         - "pip install future"
 
 before_script:
