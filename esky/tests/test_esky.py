@@ -270,15 +270,17 @@ class TestEsky(unittest.TestCase):
         really_rmtree(uzdir)
         #  Serve the updates at LOCAL_HTTP_PORT set in esky.util
         print "running local update server"
-        # try:
-        server = HTTPServer(("localhost",LOCAL_HTTP_PORT),SimpleHTTPRequestHandler)
-    # except Exception:
-       # in travis ci we start our own server
-       # pass
-    # else:
-        server_thread = threading.Thread(target=server.serve_forever)
-        server_thread.daemon = True
-        server_thread.start()
+        try:
+            server = HTTPServer(("localhost",LOCAL_HTTP_PORT),SimpleHTTPRequestHandler)
+        except Exception:
+            cmd = 'python -m SimpleHTTPServer {0} & '.format(LOCAL_HTTP_PORT)
+            
+           # in travis ci we start our own server
+           pass
+        else:
+            server_thread = threading.Thread(target=server.serve_forever)
+            server_thread.daemon = True
+            server_thread.start()
         #  Set up the deployed esky environment for the initial version
         zfname = os.path.join(tdir,"dist","eskytester-0.1.%s.zip"%(platform,))
         os.mkdir(deploydir)
