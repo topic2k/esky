@@ -9,6 +9,7 @@ python:
 install:
         # remove for container api
         - "sudo apt-get install cx-freeze"
+        - "pip install cx-freeze"
         - "pip install pytest pytest-cov"
         - "pip install future"
 
@@ -17,7 +18,7 @@ before_script:
         - python -m SimpleHTTPServer 8000 &
 
 script:
-        - py.test --verbose --pastebin=all
+        - py.test 
 
 after_script:
         - kill `ps aux | grep "python -m SimpleHTTPServer" | grep -v grep | awk '{print $2}'`
