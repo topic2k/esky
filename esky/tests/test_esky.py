@@ -29,8 +29,9 @@ from esky.bdist_esky import Executable, bdist_esky
 import esky.bdist_esky
 from esky.util import extract_zipfile, deep_extract_zipfile, get_platform, \
                       ESKY_CONTROL_DIR, files_differ, ESKY_APPDATA_DIR, \
-                      really_rmtree
+                      really_rmtree, LOCAL_HTTP_PORT
 from esky.fstransact import FSTransaction
+import pytest
 
 try:
     import py2exe
@@ -84,35 +85,41 @@ def setenv(key,value):
 class TestEsky(unittest.TestCase):
 
   if py2exe is not None:
-
+    @pytest.mark.py2exe
     def test_esky_py2exe(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe"}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_bundle1(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                             "freezer_options": {
                                               "bundle_files": 1}}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_bundle2(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                             "freezer_options": {
                                               "bundle_files": 2}}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_bundle3(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                             "freezer_options": {
                                               "bundle_files": 3}}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_skiparchive(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                             "freezer_options": {
                                               "skip_archive": True}}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_unbuffered(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                             "freezer_options": {
                                               "unbuffered": True}}})
 
+    @pytest.mark.py2exe
     def test_esky_py2exe_nocustomchainload(self):
         with setenv("ESKY_NO_CUSTOM_CHAINLOAD","1"):
            bscode = "_chainload = _orig_chainload\nbootstrap()"
@@ -120,14 +127,17 @@ class TestEsky(unittest.TestCase):
                                                "bootstrap_code":bscode}})
 
     if esky.sudo.can_get_root():
+        @pytest.mark.py2exe
         def test_esky_py2exe_needsroot(self):
             with setenv("ESKY_NEEDSROOT","1"):
                self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe"}})
 
     if pypy is not None:
+        @pytest.mark.py2exe
         def test_esky_py2exe_pypy(self):
             self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                                 "compile_bootstrap_exes":1}})
+        @pytest.mark.py2exe
         def test_esky_py2exe_unbuffered_pypy(self):
             self._run_eskytester({"bdist_esky":{"freezer_module":"py2exe",
                                                 "compile_bootstrap_exes":1,
@@ -136,47 +146,53 @@ class TestEsky(unittest.TestCase):
 
 
   if py2app is not None:
-
+    @pytest.mark.py2app
     def test_esky_py2app(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"py2app"}})
 
     if esky.sudo.can_get_root():
+        @pytest.mark.py2app
         def test_esky_py2app_needsroot(self):
             with setenv("ESKY_NEEDSROOT","1"):
                 self._run_eskytester({"bdist_esky":{"freezer_module":"py2app"}})
 
     if pypy is not None:
+        @pytest.mark.py2app
         def test_esky_py2app_pypy(self):
             self._run_eskytester({"bdist_esky":{"freezer_module":"py2app",
                                                 "compile_bootstrap_exes":1}})
 
   if bbfreeze is not None:
-
+    @pytest.mark.bbfreeze
     def test_esky_bbfreeze(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"bbfreeze"}})
 
     if sys.platform == "win32":
+        @pytest.mark.bbfreeze
         def test_esky_bbfreeze_nocustomchainload(self):
             with setenv("ESKY_NO_CUSTOM_CHAINLOAD","1"):
                bscode = "_chainload = _orig_chainload\nbootstrap()"
                self._run_eskytester({"bdist_esky":{"freezer_module":"bbfreeze",
                                                    "bootstrap_code":bscode}})
     if esky.sudo.can_get_root():
+        @pytest.mark.bbfreeze
         def test_esky_bbfreeze_needsroot(self):
             with setenv("ESKY_NEEDSROOT","1"):
                 self._run_eskytester({"bdist_esky":{"freezer_module":"bbfreeze"}})
 
     if pypy is not None:
+        @pytest.mark.bbfreeze
         def test_esky_bbfreeze_pypy(self):
             self._run_eskytester({"bdist_esky":{"freezer_module":"bbfreeze",
                                                 "compile_bootstrap_exes":1}})
 
   if cx_Freeze is not None:
-
+    @pytest.mark.cxfreeze
     def test_esky_cxfreeze(self):
         self._run_eskytester({"bdist_esky":{"freezer_module":"cxfreeze"}})
 
     if sys.platform == "win32":
+        @pytest.mark.cxfreeze
         def test_esky_cxfreeze_nocustomchainload(self):
             with setenv("ESKY_NO_CUSTOM_CHAINLOAD","1"):
                bscode = ["_chainload = _orig_chainload",None]
@@ -184,11 +200,13 @@ class TestEsky(unittest.TestCase):
                                                    "bootstrap_code":bscode}})
 
     if esky.sudo.can_get_root():
+        @pytest.mark.cxfreeze
         def test_esky_cxfreeze_needsroot(self):
             with setenv("ESKY_NEEDSROOT","1"):
                 self._run_eskytester({"bdist_esky":{"freezer_module":"cxfreeze"}})
 
     if pypy is not None:
+        @pytest.mark.cxfreeze
         def test_esky_cxfreeze_pypy(self):
             with setenv("ESKY_NO_CUSTOM_CHAINLOAD","1"):
               self._run_eskytester({"bdist_esky":{"freezer_module":"cxfreeze",
@@ -215,6 +233,7 @@ class TestEsky(unittest.TestCase):
         #  Set some callbacks to test that they work correctly
         options.setdefault("bdist_esky",{}).setdefault("pre_freeze_callback","esky.tests.test_esky.assert_freezedir_exists")
         options.setdefault("bdist_esky",{}).setdefault("pre_zip_callback",assert_freezedir_exists)
+        # options["bdist_esky"].setdefault("excludes",[]).extend(["Tkinter", "tkinter"])
         platform = get_platform()
         deploydir = "deploy.%s" % (platform,)
         esky_root = dirname(dirname(dirname(__file__)))
@@ -243,17 +262,22 @@ class TestEsky(unittest.TestCase):
         deep_extract_zipfile(os.path.join(tdir,"dist","eskytester-0.1.%s.zip"%(platform,)),uzdir)
         with open(os.path.join(tdir,"dist","eskytester-0.3.%s.from-0.1.patch"%(platform,)),"rb") as f:
             esky.patch.apply_patch(uzdir,f)
-        shutil.rmtree(uzdir)
+        really_rmtree(uzdir)
         deep_extract_zipfile(os.path.join(tdir,"dist","eskytester-0.2.%s.zip"%(platform,)),uzdir)
         with open(os.path.join(tdir,"dist","eskytester-0.3.%s.from-0.2.patch"%(platform,)),"rb") as f:
             esky.patch.apply_patch(uzdir,f)
-        shutil.rmtree(uzdir)
-        #  Serve the updates at http://localhost:8000/dist/
+        really_rmtree(uzdir)
+        #  Serve the updates at LOCAL_HTTP_PORT set in esky.util
         print "running local update server"
-        server = HTTPServer(("localhost",8000),SimpleHTTPRequestHandler)
-        server_thread = threading.Thread(target=server.serve_forever)
-        server_thread.daemon = True
-        server_thread.start()
+        try:
+            server = HTTPServer(("localhost",LOCAL_HTTP_PORT),SimpleHTTPRequestHandler)
+        except Exception:
+           # in travis ci we start our own server
+           pass
+        else:
+            server_thread = threading.Thread(target=server.serve_forever)
+            server_thread.daemon = True
+            server_thread.start()
         #  Set up the deployed esky environment for the initial version
         zfname = os.path.join(tdir,"dist","eskytester-0.1.%s.zip"%(platform,))
         os.mkdir(deploydir)
@@ -340,7 +364,7 @@ class TestEsky(unittest.TestCase):
         assert len(errors) == 1
         assert isinstance(errors[0],esky.EskyLockedError)
     finally:
-        shutil.rmtree(appdir)
+        really_rmtree(appdir)
 
 
   def test_esky_lock_breaking(self):
@@ -385,28 +409,7 @@ class TestEsky(unittest.TestCase):
         t2.join()
         assert len(errors) == 0, str(errors)
     finally:
-        shutil.rmtree(appdir)
-
-
-  def test_README(self):
-    """Ensure that the README is in sync with the docstring.
-
-    This test should always pass; if the README is out of sync it just updates
-    it with the contents of esky.__doc__.
-    """
-    dirname = os.path.dirname
-    readme = os.path.join(dirname(dirname(dirname(__file__))),"README.rst")
-    if not os.path.isfile(readme):
-        f = open(readme,"wb")
-        f.write(esky.__doc__.encode())
-        f.close()
-    else:
-        f = open(readme,"rb")
-        if f.read() != esky.__doc__:
-            f.close()
-            f = open(readme,"wb")
-            f.write(esky.__doc__.encode())
-            f.close()
+        really_rmtree(appdir)
 
 
 class TestFSTransact(unittest.TestCase):
@@ -416,7 +419,7 @@ class TestFSTransact(unittest.TestCase):
         self.testdir = tempfile.mkdtemp()
 
     def tearDown(self):
-        shutil.rmtree(self.testdir)
+        really_rmtree(self.testdir)
 
     def path(self,path):
         return os.path.join(self.testdir,path)
@@ -648,7 +651,7 @@ class TestPatch(unittest.TestCase):
                     f.write(data)
 
     def tearDown(self):
-        shutil.rmtree(self.workdir)
+        really_rmtree(self.workdir)
 
     def test_patch_bigfile(self):
         tdir = tempfile.mkdtemp()
@@ -670,7 +673,7 @@ class TestPatch(unittest.TestCase):
             dgst3 = esky.patch.calculate_digest(os.path.join(tdir,"source"))
             self.assertEquals(dgst1,dgst3)
         finally:
-            shutil.rmtree(tdir)
+            really_rmtree(tdir)
 
     def test_diffing_back_and_forth(self):
         for (tf1,_) in self._TEST_FILES:
@@ -858,7 +861,8 @@ class TestPatch(unittest.TestCase):
 
 
     def test_apply_patch_fail_when_sourcefile_has_been_deleted(self):
-        self.assertRaises(self._test_apply_patch_fail_when_sourcefile_has_been_deleted)
+        with pytest.raises(Exception):
+            self._test_apply_patch_fail_when_sourcefile_has_been_deleted()
 
 
 
@@ -889,7 +893,6 @@ class TestPatch_pybsdiff(TestPatch):
         return super(TestPatch_pybsdiff,self).tearDown()
 
 
-
 class TestFilesDiffer(unittest.TestCase):
 
     def setUp(self):
@@ -914,4 +917,4 @@ class TestFilesDiffer(unittest.TestCase):
         assert self._differs("onethreetwo","twothreeone",3,-2)
 
     def tearDown(self):
-        shutil.rmtree(self.tdir)
+        really_rmtree(self.tdir)

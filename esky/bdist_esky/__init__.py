@@ -8,9 +8,9 @@ Importing this module makes "bdist_esky" available as a distutils command.
 This command will freeze the given scripts and package them into a zipfile
 named with the application name, version and platform.
 
-The resulting zipfile is conveniently in the format expected by the class
-DefaultVersionFinder.  It will be named "appname-version.platform.zip"
-
+The main interface is the 'Esky' class, which represents a frozen app.  An Esky
+must be given the path to the top-level directory of the frozen app, and a
+'VersionFinder' object that it will use to search for updates.
 """
 
 from __future__ import with_statement
@@ -245,6 +245,8 @@ class bdist_esky(Command):
                      "function to call just before starting to zip up the app"),
                     ('enable-appdata-dir=', None,
                      "enable new 'appdata' directory layout (will go away after the 0.9.X series)"),
+                    ('detached-bootstrap-library=', None,
+                     "By default Esky appends the library.zip to the bootstrap executable when using CX_Freeze, this will tell esky to not do that, but create a separate library.zip instead"),
                    ]
 
     boolean_options = ["bundle-msvcrt","dont-run-startup-hooks","compile-bootstrap-exes","enable-appdata-dir"]
@@ -264,6 +266,7 @@ class bdist_esky(Command):
         self.pre_freeze_callback = None
         self.pre_zip_callback = None
         self.enable_appdata_dir = False
+        self.detached_bootstrap_library = False
 
     def finalize_options(self):
         self.set_undefined_options('bdist',('dist_dir', 'dist_dir'))
