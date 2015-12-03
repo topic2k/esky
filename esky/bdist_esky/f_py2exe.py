@@ -23,7 +23,7 @@ import ctypes
 try:
     from py2exe.build_exe import py2exe
 except ImportError:
-    from py2exe.distutils_build_exe import py2exe
+    from py2exe.distutils_buildexe import py2exe
 
 import esky
 from esky.util import is_core_dependency, ESKY_CONTROL_DIR
